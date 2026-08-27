@@ -29,10 +29,60 @@ So each note carries a `commitment` field:
 | `medium` | Replaceable, but configuration or muscle memory hangs off it |
 | `fixed` | Hardware, company policy, or half a dozen other notes. Do not research, only check the version |
 
-A weekly run works through the five notes with the oldest `researched_on` and
-writes findings back into the files. At rebuild time only the stragglers are
-left. In this demo, `apps/screen-recorder.md` is what that run found: a tool
-that looked fine and had been dead for three years.
+In this demo, `apps/screen-recorder.md` is what that produced: a tool that
+looked fine and had been dead for three years.
+
+## Related: Karpathy's LLM Wiki
+
+The general pattern here is the one Andrej Karpathy published in April 2026 as
+[llm-wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f):
+rather than retrieving from raw documents at query time, an agent incrementally
+builds and maintains a persistent, interlinked collection of Markdown files —
+atomic entries, a consistent structure, metadata travelling with each entry, and
+the agent as the primary reader rather than a human browsing.
+
+This repository applies that pattern to a subject it was not written for, and
+the subject changes two things:
+
+- **The source is not a corpus, it is a machine.** There is nothing to ingest.
+  Each note describes a state that can be *read back*, which is why every note
+  has a `## Verify` section and why there is no progress file. A knowledge wiki
+  is right or wrong; this one can be right, wrong, **or stale** — and staleness
+  is the failure mode worth engineering against.
+- **Not every entry may be revised.** A knowledge base wants every claim
+  updatable. Here, half the notes describe things that are not up for
+  discussion — hardware, company policy. That is what `commitment` encodes: it
+  is a permission field, telling the agent where a proposal is useful and where
+  it is noise.
+
+## What was rejected
+
+Both alternatives were tried before this, and both failed at the same point.
+
+**Ansible.** The obvious answer: a machine setup is configuration management,
+and this is the tool for it. It was rejected for three reasons. Its playbooks
+are declarative about *state* and silent about *reasoning* — the `when:` clause
+says a package is installed on Darwin, never why that package and not the other
+one, and a comment above a task is not something anything can act on. Its
+strength is enforcing a state across many machines, whereas the actual job here
+is deciding, once, on one machine, whether a state is still wanted. And most of
+it is aimed at servers: a large share of what this wiki records — an
+accessibility permission, a first-launch dialog, whether a keyboard shortcut
+actually fires — has no module and cannot be asserted at all.
+
+**Hand-written setup scripts.** The starting point, and it works for about a
+year. Then the script is 600 lines, every line is still correct in the sense
+that it runs, and nobody can say which of them are still *wanted*. Comments rot
+because nothing reads them. The failure is silent: a script reinstalls a dead
+tool without a murmur, and the removal you made deliberately six months ago
+comes back because a rebuild simply ran the file.
+
+Neither is wrong about execution. Both are wrong about the part that turned out
+to matter — carrying a reason forward in a form something can act on.
+
+**What is kept from both:** the Brewfile is the declarative inventory, and
+`examples/macos-defaults.sh` is a script. They just are not where the reasoning
+lives.
 
 ## There is no progress file
 
@@ -45,6 +95,69 @@ checks — does this shortcut actually snap the window? — no command can perfo
 Notes carried over from an earlier document say `inherited`, which means: never
 verified, treat as unknown. `./check.py` prints the tally on every run, so the
 wiki's own debt is visible rather than assumed away.
+
+## The scheduled run
+
+The third building block, next to the notes and the skills, and the one that
+makes the difference between a wiki and an archive. Two jobs, both on a timer,
+both writing back into the repository rather than into a report nobody opens.
+
+**Weekly — the alternatives run.** It takes the five notes with the oldest
+`researched_on`, skips everything marked `fixed`, and checks each remaining tool
+for the same five things: is it alive, is it archived, is there a named
+successor, are there advisories, is there something demonstrably better. Then it
+writes the finding into the file and bumps the date.
+
+What it does with the result is graded, and the grading is the load-bearing
+part:
+
+| Finding | What happens |
+|---|---|
+| `none` | bump the date. Silent |
+| `soft` | append to `## Alternatives`. Still silent |
+| `hard` | append **and** send one message |
+
+With two dozen loosely committed tools there is *always* something newer
+somewhere. A run that notified on every soft finding would burn the channel
+within two weeks, and the one hard finding a year — the discontinued tool with
+the end-of-life runtime — would arrive in a stream nobody reads any more. The
+silence is the feature.
+
+Because it runs continuously, a rebuild does not start with weeks of research.
+It starts with the stragglers.
+
+**Every six hours — the secret scan.** It greps the tracked files of this
+repository and of the dotfiles repository for private key markers and token
+shapes, and it also checks whether the dotfiles repository has diverged from its
+remote. Both are rules stated elsewhere in prose; this is the part that makes
+them enforced rather than intended. A rule nobody checks is a preference.
+
+## The skills
+
+One per lifecycle stage, in `.claude/skills/`. They are what turns the wiki from
+documentation into something that acts — and each exists for a specific place
+where the one-line command goes quietly wrong.
+
+- **`mac-bootstrap`** — Sets up a machine from these notes, resolving the
+  `requires:` chains for order and confirming every single note with the human
+  before installing anything.
+- **`mac-install`** — Adds new software: checks first whether the tool is alive
+  and whether the OS already ships it, then installs, then records it in the
+  Brewfile, then writes the note.
+- **`mac-configure`** — Sets up the things that have no package behind them — an
+  access path, a share, a scheduled agent — where the precondition is what
+  actually needs documenting.
+- **`mac-system-setting`** — Analyses, changes, tries out and reverts a system
+  setting, refusing to write anything before the old value has been read and
+  recorded.
+- **`mac-update`** — Updates one tool or everything stale, note-guided, running
+  each note's `## Verify` afterwards and writing back what changed.
+- **`mac-research`** — Looks for alternatives to the five least recently checked
+  tools, and decides whether a finding is worth interrupting anyone for.
+- **`mac-write-note`** — Writes or updates the note after a change, without
+  asking whether the change is worth recording.
+- **`read-aloud`** — Reads a text out loud, rewritten for listening rather than
+  spoken off the screen; the one skill here with nothing to do with the wiki.
 
 ## What makes it work for a language model
 
@@ -64,27 +177,12 @@ wiki's own debt is visible rather than assumed away.
 ./check.py     # checks the wiki itself: front matter, ids, links, section order
 ```
 
-The skills in `.claude/skills/` are the entry points — one per lifecycle stage.
-They are what turns the wiki from documentation into something that acts:
-installing, updating, researching, and writing back what was learned.
-
-```
-mac-bootstrap        set up a machine from scratch
-mac-install          new software, with a check and a note
-mac-configure        set up something with no package behind it
-mac-system-setting   analyse, change, try, revert a system setting
-mac-update           update, note-guided
-mac-research         look for alternatives, weekly
-mac-write-note       write the note after a change
-read-aloud           read a text out loud
-```
-
 ## No credentials
 
 Internals are fine — hostnames, cluster and tenant names, internal paths.
 A token, a password, a private key is not, not even redacted and not "just as an
-example". Notes point at the password store path instead. In a real deployment a
-scheduled job greps the repository for private key markers.
+example". Notes point at the password store path instead, and the six-hourly
+scan above is what keeps that from being merely a good intention.
 
 ## Licence
 
