@@ -138,17 +138,19 @@ them enforced rather than intended. A rule nobody checks is a preference.
 
 ## Why a wiki and not a script
 
-Setting up a machine is usually captured in one of two ways, and both lose
-something:
+A script can carry its reasoning. Nothing stops anyone writing a comment above
+the line, and a language model reads that comment perfectly well. So the
+difference is not that a script cannot say *why*.
 
-|  | Captures | Loses |
-|---|---|---|
-| A shell script | *what* to do | *why*, and whether it is still right |
-| A written report | *what happened* | executability, and it ages silently |
+The difference is that a comment has no address. It has no date, no field
+saying whether this decision is still open or settled for good, and nowhere to
+record what a check found. Nothing can sort by it, question it, or write an
+answer back into it. The commands stay correct while the reasons quietly go
+stale, and no run can tell the two apart.
 
-Neither can answer the question that actually matters at rebuild time: **is this
-still the right choice?** A script will happily reinstall a tool that was
-discontinued two years ago. A report will describe it beautifully.
+Giving each decision a file, an id and a handful of fields is what turns the
+reasoning from something readable into something that can be *operated* — by
+an agent, on a schedule, writing its findings back into the same file.
 
 That question is what the `commitment` field exists for, and `apps/kap.md` is
 what it produced on the first run: a tool that launched, sat in the Brewfile,
@@ -184,8 +186,9 @@ actually fires — has no module and cannot be asserted at all.
 
 **Hand-written setup scripts.** The starting point, and it works for about a
 year. Then the script is 600 lines, every line is still correct in the sense
-that it runs, and nobody can say which of them are still *wanted*. Comments rot
-because nothing reads them. The failure is silent: a script reinstalls a dead
+that it runs, and nobody can say which of them are still *wanted*. The comments
+are still there and still readable — but nothing acts on them, so nothing keeps
+them true. The failure is silent: a script reinstalls a dead
 tool without a murmur, and the removal you made deliberately six months ago
 comes back because a rebuild simply ran the file.
 

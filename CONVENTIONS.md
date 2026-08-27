@@ -11,10 +11,16 @@ checked_on: 2026-08-22
 
 ## What this is for
 
-A shell script says **what** is done. This collection says **why** — and that
-is the part a script cannot carry. When a new machine is set up, an AI reads
-these files, checks per entry whether the tool is still the right choice, and
-proposes alternatives where something has moved. Only then does it install.
+A shell script says **what** is done, and a comment in it can say why. What a
+comment cannot do is carry a *state*: when the reason was last examined, whether
+it is open to revision at all, what the last look found. This collection gives
+every reason a file, an id and fields, so that those questions have somewhere to
+live.
+
+That is what makes it operable. When a machine is set up, an agent reads these
+files, checks per entry whether the tool is still the right choice, proposes
+alternatives where something has moved — and writes what it found back into the
+note. Only then does it install.
 
 The collection is **not a replacement for execution**. It is the ground an
 execution is derived from — every time anew, every time checked.
