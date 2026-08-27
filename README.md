@@ -11,6 +11,12 @@ is not named, and internal hostnames, paths, ticket numbers and credentials
 never enter this repository at all. Some notes are shortened. Nothing in them
 is invented.
 
+It does not claim to be complete. The wiki it is taken from holds about four
+times as many notes, and several of the mechanisms described here are sketched
+rather than built out. What is in this repository is the slice that shows the
+idea: the schema, the checker, the skills, and enough real cases to judge them
+by. The gaps are deliberate.
+
 **Start at [INDEX.md](INDEX.md). The rules are in [CONVENTIONS.md](CONVENTIONS.md).**
 
 ## What is in here
@@ -231,6 +237,14 @@ Internals are fine — hostnames, cluster and tenant names, internal paths.
 A token, a password, a private key is not, not even redacted and not "just as an
 example". Notes point at the password store path instead, and the six-hourly
 scan above is what keeps that from being merely a good intention.
+
+## Feedback
+
+The point of publishing this is the idea, not the repository. If you keep your
+machine this way, or tried something like it and it fell apart, I would like to
+hear about it — open an issue. Disagreement is useful too: several of the
+decisions in here were reversed once already, and the reversals are in the
+notes.
 
 ## Licence
 
