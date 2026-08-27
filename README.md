@@ -1,5 +1,14 @@
 # setup-wiki
 
+**What if your machine setup were not a script but a wiki — one an agent keeps
+for you?**
+
+A script can say why every line is there; that is what comments are for, and a
+language model reads them fine. What a comment cannot do is carry a state: when
+the reason was last examined, whether it is open to revision, what the last look
+found. Give each decision a file, an id and a few fields, and the reasoning
+stops being something you read and becomes something an agent can operate.
+
 **A demonstration, not a fabrication.** This is an extract from the setup wiki
 of a real MacBook Pro: one Markdown note per decision, in folders by topic,
 with an index on top and a schema a language model can act on. The tools, the
@@ -138,24 +147,20 @@ them enforced rather than intended. A rule nobody checks is a preference.
 
 ## Why a wiki and not a script
 
-A script can carry its reasoning. Nothing stops anyone writing a comment above
-the line, and a language model reads that comment perfectly well. So the
-difference is not that a script cannot say *why*.
+The state a comment cannot carry is exactly what the schema turns into fields.
+When the reason was last examined is `researched_on`. Whether the decision is
+open to revision at all is `commitment`. What the last look found is
+`research_finding`, together with the `## Alternatives` section it has to agree
+with — and `check.py` reports it when the two disagree.
 
-The difference is that a comment has no address. It has no date, no field
-saying whether this decision is still open or settled for good, and nowhere to
-record what a check found. Nothing can sort by it, question it, or write an
-answer back into it. The commands stay correct while the reasons quietly go
-stale, and no run can tell the two apart.
+Three fields, and between them the weekly run has everything it needs: what to
+pick up next, what to leave alone, and where to put the answer.
 
-Giving each decision a file, an id and a handful of fields is what turns the
-reasoning from something readable into something that can be *operated* — by
-an agent, on a schedule, writing its findings back into the same file.
-
-That question is what the `commitment` field exists for, and `apps/kap.md` is
-what it produced on the first run: a tool that launched, sat in the Brewfile,
-showed nothing broken from the outside — and whose last release was almost four
-years old.
+`apps/kap.md` is what that produced on the first run. A tool that launched, sat
+in the Brewfile and showed nothing broken from the outside, whose last release
+was almost four years old and which had never once been used. A comment saying
+"screen recording, because Shottr cannot do video" would have been true, would
+have been readable, and would have changed nothing.
 
 ## There is no progress file
 
