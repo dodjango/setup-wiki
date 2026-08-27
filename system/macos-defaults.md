@@ -19,7 +19,7 @@ checked_by: human
 
 Apps have a Brewfile. Settings had nothing — they lived as prose in this note,
 which turned out to be the weakest part of the whole wiki. Prose carries
-reasons effortlessly and values carelessly: there were 24 justified settings
+reasons effortlessly and values carelessly: there were 16 justified settings
 here and only 6 named keys, and one of the six checks read the wrong domain.
 
 So the reason is now a *field beside the value*, in a table the script reads:

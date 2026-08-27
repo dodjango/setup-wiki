@@ -120,7 +120,9 @@ for path, rel in wiki_files():
     fm = front_matter(path.read_text()) or {}
     if fm.get("section") != "meta":
         standing[fm.get("checked_by", "?")] += 1
-print(f"\n{len(notes)} notes, {len(errors)} errors, {len(notices)} notices")
+content = sum(standing.values())
+print(f"\n{content} notes ({len(notes) - content} meta pages), "
+      f"{len(errors)} errors, {len(notices)} notices")
 print("Verification standing: "
       + ", ".join(f"{v}x {k}" for k, v in standing.most_common()))
 sys.exit(1 if errors else 0)

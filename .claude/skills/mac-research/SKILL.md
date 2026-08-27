@@ -13,15 +13,17 @@ still the right choice at all.
 Five notes per run, **oldest `researched_on` first**:
 
 ```bash
-git ls-files '*/*.md' \
+git ls-files '*/*.md' ':!.claude/*' \
   | xargs grep -l 'commitment: \(loose\|medium\)' \
   | xargs grep -H 'researched_on:' | sort -t: -k3 | head -5
 ```
 
-`git ls-files '*/*.md'` rather than `grep -r`: the latter also catches
-`.claude/skills/` and `README.md`, which are not notes. The pattern `*/*.md`
-takes only what lives in a section folder, and leaves `INDEX.md` and
-`CONVENTIONS.md` out as well.
+`git ls-files` rather than `grep -r`: the latter also walks `.claude/skills/`
+and `README.md`, which are not notes. The exclusion is not optional — in a git
+pathspec `*` crosses `/`, so `'*/*.md'` on its own matches
+`.claude/skills/mac-install/SKILL.md` too. What is left is exactly the notes in
+their section folders; `INDEX.md` and `CONVENTIONS.md` are out because they sit
+at the root.
 
 **If every note carries the same `researched_on`** — right after the wiki was
 created, for instance — there is no "oldest". Then alphabetical order applies,
@@ -78,10 +80,10 @@ Otherwise the file fills up with "nothing new" lines.
 **Hard** means: discontinued, archived, security hole, or last release over two
 years old.
 
-**Why the split is strict:** with two dozen loosely committed tools there is
-*always* something newer somewhere. If every soft finding reported, the channel
-would be dead within two weeks — and with it every other notification that uses
-it.
+**Why the split is strict:** across the loosely committed notes there is
+*always* something newer somewhere — and each of them covers several tools. If
+every soft finding reported, the channel would be dead within two weeks, and
+with it every other notification that uses it.
 
 ## Finish
 

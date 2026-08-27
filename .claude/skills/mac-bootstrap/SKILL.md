@@ -21,14 +21,12 @@ checking whether a decision made back then still holds today.
 4. **You write nothing about progress into the wiki.** The notes describe the
    target state. If that changes, it is a case for `mac-write-note`.
 
-## Sequence
-
-### 1. Orient
+## Step 1 — orient
 
 Read `INDEX.md` and `CONVENTIONS.md`. Then run `./check.py` — if it finds
 errors, the wiki itself is broken and has to be repaired first.
 
-### 2. Take stock
+## Step 2 — take stock
 
 For every note with `status: active` and a matching `machines:` entry, run
 `## Verify`. That gives three buckets:
@@ -49,7 +47,7 @@ precisely because no command can do them. Never report a check as passed whose
 manual part you skipped — and in that case do not set `checked_by: machine`
 either.
 
-### 3. Research the stragglers
+## Step 3 — research the stragglers
 
 Every note with `commitment: loose` or `medium` whose `researched_on` is older
 than three weeks or missing: research it now (see `mac-research` for the
@@ -58,13 +56,13 @@ method). The weekly run has handled most of them; this is only the remainder.
 Notes with `commitment: fixed` are **not** researched. Only the version is
 checked.
 
-### 4. Walk the hard findings first
+## Step 4 — walk the hard findings first
 
 Present every `research_finding: hard` to the human together, **before**
 anything is installed. This is where a tool decision can flip — and you do not
 want to discover that after you have built on top of it.
 
-### 5. Set up
+## Step 5 — set up
 
 Resolve the `requires:` chains, then note by note:
 
@@ -74,11 +72,17 @@ Resolve the `requires:` chains, then note by note:
 4. If it fails: read `## Pitfalls` before improvising. If the cause is there, it
    has happened before
 
-### 6. What you learn on the way
+## Step 6 — what you learn on the way
 
 Every divergence between a note and reality is a change to the wiki, not a side
 observation. Collect them and work them in with `mac-write-note` at the end —
 or immediately, if it was a pitfall that cost time.
+
+## Finish
+
+This skill commits nothing. It changes the machine, not the wiki — and the
+wiki already describes the target state. Everything you learned on the way goes
+in through `mac-write-note`, which runs `./check.py` and commits there.
 
 ## What you do not do
 

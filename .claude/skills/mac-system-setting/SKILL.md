@@ -112,6 +112,8 @@ Two things are mandatory here:
   script reads, with domain, key, type, target value, mode and reason, so that
   the wiki is the script it otherwise would not have.
 
+## Finish
+
 ```bash
 ./check.py
 git add -A && git commit
