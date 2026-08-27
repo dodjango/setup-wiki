@@ -4,7 +4,7 @@ title: Conventions of this wiki
 section: meta
 purpose: The rules the notes are written and read by — for humans and machines alike
 status: active
-checked_on: 2026-03-20
+checked_on: 2026-08-22
 ---
 
 # Conventions
@@ -61,7 +61,7 @@ It answers the AI's question: *am I allowed to propose an alternative here?*
   (`fish`, `neovim`)
 - **`fixed`** — not negotiable. Hardware, a company policy, or half a dozen
   other notes depend on it. Do not research, only check the version.
-  (`corporate-tls`, `chezmoi`, `password-store`)
+  (`corporate-tls`, `chezmoi`, `gopass`)
 
 ## The research finding lives in two places
 

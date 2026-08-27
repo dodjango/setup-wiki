@@ -89,6 +89,6 @@ in through `mac-write-note`, which runs `./check.py` and commits there.
 - No blanket `chezmoi apply` without a path. Always targeted.
 - Never loosen a security setting because it is more convenient.
 - Never conclude "no authorization" from a non-interactive auth failure. See
-  `security/password-store.md`.
+  `security/gopass.md`.
 - Never propose new credentials without the existing ones having been tested in
   a real terminal.

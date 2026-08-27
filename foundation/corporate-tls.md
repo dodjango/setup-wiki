@@ -10,7 +10,7 @@ install: homegrown
 package: update-corporate-ca.sh
 requires: [homebrew]
 machines: [mac, linux-laptop]
-checked_on: 2026-04-11
+checked_on: 2026-08-25
 checked_by: machine
 ---
 
@@ -18,7 +18,7 @@ checked_by: machine
 
 ## Why
 
-The company proxy at Kestrel Logistics terminates TLS and re-signs it with an
+The company proxy terminates TLS and re-signs it with an
 internal root. Anything that verifies certificates against its own bundle —
 which is most things — fails with a certificate error that reads like a broken
 server. It is not. It is the network.
@@ -59,11 +59,11 @@ being read.
 
 ## Decisions
 
-**2026-03-11 — one bundle in the home directory, not an entry per tool.** Each
+**2026-08-12 — one bundle in the home directory, not an entry per tool.** Each
 tool wants its own variable, but they can all point at the same file. One file
 means one rotation.
 
-**2026-03-12 — never export `NODE_OPTIONS="--use-system-ca"` globally.**
+**2026-08-13 — never export `NODE_OPTIONS="--use-system-ca"` globally.**
 Rejected the day after it was introduced, see Pitfalls. It is listed here as a
 rejected decision rather than deleted, because it is the answer every search
 result gives.
@@ -96,4 +96,4 @@ is the least likely explanation. Check the bundle first.
 
 ## Links
 
-[[homebrew]] · [[admin-rights]] · [[chezmoi]] · [[password-store]]
+[[homebrew]] · [[admin-rights]] · [[chezmoi]] · [[gopass]]

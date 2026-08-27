@@ -19,30 +19,43 @@ set -uo pipefail
 
 # Domain|Key|Type|Value|Mode|Reason
 SETTINGS='
-com.apple.finder|FXDefaultSearchScope|string|SCcf|auto|Search the current folder, not the whole Mac. SCcf = current folder
-com.apple.finder|ShowPathbar|bool|1|auto|The path bar answers "where am I" without a second click
-com.apple.finder|FXPreferredViewStyle|string|Nlsv|auto|List view by default; icon view hides the modification date
+NSGlobalDomain|KeyRepeat|int|2|auto|Fastest repeat rate -- cursor navigation in the editor
+NSGlobalDomain|InitialKeyRepeat|int|15|auto|Short delay before the repeat starts, same reason
+NSGlobalDomain|ApplePressAndHoldEnabled|bool|0|auto|No accent popup on hold: otherwise jjjj in vim shows accents instead of repeating
+NSGlobalDomain|AppleKeyboardUIMode|int|3|auto|Tab reaches every control -- dialogs usable without the mouse
+NSGlobalDomain|com.apple.keyboard.fnState|bool|1|auto|F-keys act as F1-F12: F2 renames. Cost: volume and brightness now need fn
+NSGlobalDomain|NSAutomaticQuoteSubstitutionEnabled|bool|0|auto|Typographic quotes wreck code and commit messages
+NSGlobalDomain|NSAutomaticDashSubstitutionEnabled|bool|0|auto|Dash substitution, same reason
+NSGlobalDomain|NSAutomaticSpellingCorrectionEnabled|bool|0|auto|Autocorrect, same reason
+NSGlobalDomain|NSAutomaticCapitalizationEnabled|bool|0|auto|Capitalisation at the start of a sentence, same reason
 NSGlobalDomain|AppleShowAllExtensions|bool|1|auto|Extensions always visible. NOTE: this key lives here, NOT in com.apple.finder
-NSGlobalDomain|ApplePressAndHoldEnabled|bool|0|auto|Key repeat instead of the accent popup. Required for editor navigation
-NSGlobalDomain|InitialKeyRepeat|int|15|auto|Repeat starts sooner. 15 = 225ms
-NSGlobalDomain|KeyRepeat|int|2|auto|And repeats faster. 2 = 30ms
-NSGlobalDomain|com.apple.keyboard.fnState|bool|1|auto|F-keys act as F1-F12. Cost: volume and brightness now need fn
-com.apple.dock|autohide|bool|1|auto|Reclaims vertical space on a 14-inch display
-com.apple.dock|show-recents|bool|0|auto|Recent apps make the Dock jump around; the position is the muscle memory
-com.apple.screencapture|location|string|~/Screenshots|auto|Keeps the desktop clean. Reverting means `defaults delete`, not writing the old path
-com.apple.screencapture|disable-shadow|bool|1|auto|Window shadows waste half the image width in a document
-NSGlobalDomain|AppleLocale|string|en_US@rg=dezzzz|hand|Region stays German (dates, numbers, paper size). A wrong value here turns half the interface around
-com.apple.controlcenter|Bluetooth|int|18|hand|Control Centre cannot be steered by defaults; written values are overwritten within seconds
-com.apple.symbolichotkeys|AppleSymbolicHotKeys|dict|-|hand|Shortcuts hang off the keyboard layout, not the character. Set in System Settings
-com.apple.universalaccess|reduceMotion|bool|1|hand|Accessibility settings are protected; the write is refused without a TCC grant
+com.apple.finder|ShowPathbar|bool|1|auto|Path bar -- Windows Explorer behaviour
+com.apple.finder|ShowStatusBar|bool|1|auto|Status bar, same reason
+com.apple.finder|FXPreferredViewStyle|string|Nlsv|auto|List view by default (Nlsv = list view)
+com.apple.finder|_FXSortFoldersFirst|bool|1|auto|Folders before files, as in Explorer
+com.apple.finder|FXDefaultSearchScope|string|SCcf|auto|Search the current folder, not the whole Mac (SCcf = current folder)
+com.apple.finder|FXEnableExtensionChangeWarning|bool|0|auto|No confirmation dialog when changing a file extension
+com.apple.finder|QuitMenuItem|bool|1|auto|Cmd-Q quits the Finder -- otherwise impossible on macOS
+com.apple.dock|show-recents|bool|0|auto|No recent applications in the Dock -- they make it jump around
+com.apple.dock|autohide-delay|float|0|auto|Show the Dock without a delay
+com.apple.dock|autohide-time-modifier|float|0.15|auto|And quickly, not instantly -- 0 looks jerky
+com.apple.dock|mru-spaces|bool|0|auto|Stops the desktops reordering by most recent use. Three fixed desktops depend on it
+com.apple.WindowManager|EnableStandardClickToShowDesktop|bool|1|auto|Click on the background moves windows aside. Apple flipped this default itself, see the note
+com.apple.WindowManager|GloballyEnabled|bool|0|auto|Stage Manager off
+com.apple.screencapture|disable-shadow|bool|1|auto|Screenshots without a drop shadow -- the border wastes half the width in a document
+com.apple.desktopservices|DSDontWriteNetworkStores|bool|1|auto|No .DS_Store on network shares -- otherwise litter on the company file server
+NSGlobalDomain|NSWindowResizeTime|float|0.05|auto|Faster window animations
+NSGlobalDomain|AppleLanguages|array|en-US de-DE|hand|Interface in English: error messages and support articles are English. You will not find "Bedienungshilfen" in them, "Accessibility" you will
+NSGlobalDomain|AppleLocale|string|en_US@rg=dezzzz|hand|Region stays German (dates, numbers, paper size). A wrong value here turns half the interface around -- by hand only
 '
 
-# Things that are not a `defaults` key at all. Reported, never written.
+# Not reachable through `defaults` at all. Reported, never written, so they are
+# not forgotten at a rebuild.
 BY_HAND='
-chflags nohidden ~/Library|The Library folder is a filesystem flag, not a preference
-Rosetta 2 installed|One bundled helper of a third-party app is x86-only; the launch fails with an architecture error without it
-Accessibility permission for the window manager|Silently revoked by some macOS updates. Only a keypress proves it
-FileVault enabled|Company policy, enforced by the management profile. Listed so its absence is noticed
+chflags nohidden ~/Library|Makes ~/Library permanently visible (the equivalent of %APPDATA%). A filesystem flag, not a preference
+System Settings > Control Centre|Take Focus and Wi-Fi out of the menu bar. Values written by defaults are overwritten within seconds; tested unsuccessfully in both orderings
+Right-click a Dock icon > Options > Assign To|Pin the mail client and the terminal to their fixed desktops
+Rosetta 2 installed|One bundled helper of a third-party app was x86-only and its launch failed with an architecture error. See apps/kap.md
 '
 
 set_mode=0
@@ -81,10 +94,14 @@ printf '%s\n' "$SETTINGS" | while IFS='|' read -r domain key type want mode reas
     fi
 
     if [ "$set_mode" = "1" ]; then
+        # shellcheck disable=SC2086
         case "$type" in
             bool)   defaults write "$domain" "$key" -bool "$want" ;;
             int)    defaults write "$domain" "$key" -int "$want" ;;
+            float)  defaults write "$domain" "$key" -float "$want" ;;
             string) defaults write "$domain" "$key" -string "$want" ;;
+            # Deliberately unquoted: an array value is a list of words.
+            array)  defaults write "$domain" "$key" -array $want ;;
             *)      printf '   unknown type %s — skipped\n' "$type"; continue ;;
         esac
         printf '   set. Note the way back: '

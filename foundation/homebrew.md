@@ -9,7 +9,7 @@ commitment_reason: Everything installable in this wiki hangs off it; the alterna
 install: manual
 package: homebrew
 machines: [mac]
-checked_on: 2026-04-11
+checked_on: 2026-08-25
 checked_by: machine
 ---
 
@@ -56,12 +56,12 @@ That is the signal, not a failure to push through.
 
 ## Decisions
 
-**2026-03-09 — Homebrew over Nix.** Nix would give reproducible installs, which
+**2026-08-11 — Homebrew over Nix.** Nix would give reproducible installs, which
 is exactly what this wiki is chasing. It was rejected anyway: it wants
 `/nix`, which needs a volume and a daemon, and the security baseline on this
 machine flags unsigned launch daemons. Revisit if the baseline changes.
 
-**2026-03-09 — casks into `~/Applications`.** Spotlight and Launchpad find
+**2026-08-11 — casks into `~/Applications`.** Spotlight and Launchpad find
 apps there just as well. The cost is that a cask requiring a hardcoded
 `/Applications` path has to be installed by hand, which has happened once so
 far and is noted in the affected note.
@@ -73,7 +73,7 @@ carry `auto_updates true` and never appear in `brew outdated --cask`. Whoever
 reads only that list reports "all current" for something they never checked.
 Always `--greedy`.
 
-Counter-check on 2026-04-11: without `--greedy` two casks, with `--greedy`
+Counter-check on 2026-08-25: without `--greedy` two casks, with `--greedy`
 four.
 
 ## Links

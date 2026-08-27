@@ -4,15 +4,16 @@ title: Setting up this Mac
 section: meta
 purpose: Entry point and table of contents — from here a human or a machine finds every note
 status: active
-checked_on: 2026-04-14
+checked_on: 2026-08-27
 ---
 
 # Setting up this Mac
 
-> **This is a demonstration.** The machine, the company and the people in it are
-> invented. The notes are written the way real ones are, because a schema is
-> only judgeable at full size — but nothing here describes an actual system.
-> See the [README](README.md) for what this is showing and why.
+> **This is a demonstration, not a fabrication.** The tools, decisions and
+> incidents below are real. What is missing is anything that identifies the
+> employer: the company is not named, and internal hostnames, paths and
+> credentials are not in this repository. See the [README](README.md) for what
+> this is showing and why.
 
 This collection describes **what** is set up on this machine and above all
 **why**. It is the ground a fresh install is derived from — not replayed
@@ -22,8 +23,8 @@ now?
 How the notes are built is in [[conventions]]. The most important field is
 `commitment`: it says where an alternative is welcome and where it is not.
 
-Machine: MacBook Pro, Apple Silicon, managed by Kestrel Logistics, no standing
-admin. Sister machines: a Linux laptop and a home server.
+Machine: MacBook Pro, Apple Silicon, centrally managed by the employer, no
+standing admin. Sister machines: a Linux laptop and a home server.
 
 ## The ways into this wiki
 
@@ -92,16 +93,16 @@ cannot be quietly ignored.
 
 | Note | Commitment | Purpose |
 |---|---|---|
-| [[password-store]] | fixed | Where every credential lives, so no file has to hold one |
+| [[gopass]] | fixed | Where every credential lives, so no file has to hold one |
 | [[network-shares]] | fixed | Company shares on demand; the credential step belongs to a human |
 
 ## apps/
 
 | Note | Commitment | Purpose |
 |---|---|---|
-| [[window-manager]] | loose | Window snapping; the note a machine cannot verify |
+| [[rectangle]] | loose | Window snapping; the note a machine cannot verify |
 | [[small-tools]] | loose | Four utilities with no story of their own |
-| [[screen-recorder]] | loose | **rejected** 2026-04-03 — discontinued, dead runtime, never used |
+| [[kap]] | loose | **rejected** 2026-08-22 — discontinued, dead runtime, never used |
 
 ## system/
 
@@ -117,8 +118,8 @@ the overview.
 
 | Note | What is open |
 |---|---|
-| [[window-manager]] | The accessibility permission has to be re-confirmed after every macOS update, and nothing reminds us |
-| [[macos-defaults]] | Four rows are marked `hand` and have no automated check at all |
+| [[rectangle]] | The accessibility permission has to be re-confirmed after every macOS update, and nothing reminds us |
+| [[macos-defaults]] | Two rows are marked `hand`, and four more entries are not preferences at all — none of the six has an automated check |
 | [[network-shares]] | A login agent is prepared for but not enabled |
 | [[neovim]] | The headless verification cannot see the plugin bootstrap |
 

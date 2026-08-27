@@ -8,9 +8,9 @@ commitment: fixed
 commitment_reason: Company file server and VPN; there is no alternative to choose between
 install: homegrown
 package: network-shares.sh
-requires: [password-store, chezmoi]
+requires: [gopass, chezmoi]
 machines: [mac]
-checked_on: 2026-04-13
+checked_on: 2026-08-26
 checked_by: human
 ---
 
@@ -64,13 +64,13 @@ ls /Volumes/Exchange >/dev/null && echo mounted
 
 ## Decisions
 
-**2026-04-13 — on demand, not at login.** A laptop is usually *not* on the
+**2026-08-26 — on demand, not at login.** A laptop is usually *not* on the
 company network when you log in, and the VPN does not come back on its own
 after the lid has been closed. An automation that mostly fails is noise. The
 reachability check is written so that a login agent can be added later without
 restructuring anything.
 
-**2026-04-13 — the credential step belongs to a human.** The script never asks
+**2026-08-26 — the credential step belongs to a human.** The script never asks
 for a password and never receives one. A person mounts the share once, ticks
 "remember in keychain", and every later mount is silent.
 
@@ -80,7 +80,7 @@ for a password and never receives one. A person mounts the share once, ticks
 it works.** The command cannot read the data-protection keychain, so it returns
 nothing for an entry that is plainly there. Reading that as "the password was
 not saved" is wrong — and it is the third instance of the same mistake in this
-wiki, after the SSH key in [[password-store]] and the language server in
+wiki, after the SSH key in [[gopass]] and the language server in
 [[neovim]].
 
 The lesson generalises past all three: **a tool reporting nothing is only
@@ -92,4 +92,4 @@ ping proves nothing about a reachable host. Probe the port.
 
 ## Links
 
-[[password-store]] · [[chezmoi]] · [[admin-rights]]
+[[gopass]] · [[chezmoi]] · [[admin-rights]]

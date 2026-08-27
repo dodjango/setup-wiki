@@ -9,7 +9,7 @@ commitment_reason: Muscle memory, and several of them are preconditions for othe
 install: system-setting
 package: macos-defaults.sh
 machines: [mac]
-checked_on: 2026-04-14
+checked_on: 2026-08-27
 checked_by: human
 ---
 
@@ -19,8 +19,9 @@ checked_by: human
 
 Apps have a Brewfile. Settings had nothing — they lived as prose in this note,
 which turned out to be the weakest part of the whole wiki. Prose carries
-reasons effortlessly and values carelessly: there were 16 justified settings
-here and only 6 named keys, and one of the six checks read the wrong domain.
+reasons effortlessly and values carelessly: of roughly 36 settings described
+here, six named an actual key — the rest were described by their effect
+("extensions visible") — and one of the six checks read the wrong domain.
 
 So the reason is now a *field beside the value*, in a table the script reads:
 
@@ -57,23 +58,24 @@ defaults read NSGlobalDomain AppleShowAllExtensions     # 1
 ```
 
 ```
-# by hand: the four rows marked `hand` — confirm them in System Settings.
+# by hand: the two rows marked `hand`, and the four entries that are not
+#          preferences at all — confirm them in System Settings.
 ```
 
 ## Decisions
 
-**2026-04-14 — the reason belongs beside the value, not in a paragraph above
+**2026-08-27 — the reason belongs beside the value, not in a paragraph above
 it.** This is the correction of the original design. A paragraph explaining why
 the Finder should search the current folder is worth a great deal at rebuild
 time and worth nothing to a checker, because it does not contain
 `FXDefaultSearchScope`. Splitting them meant the wiki could not verify its own
 most-repeated claim.
 
-**2026-03-13 — every setting is per-user.** Not because system-wide was
+**2026-08-14 — every setting is per-user.** Not because system-wide was
 impossible but because per-user needs no admin and is individually reversible.
 See [[admin-rights]].
 
-**2026-03-13 — `does not exist` is recorded as a value.** The way back from a
+**2026-08-14 — `does not exist` is recorded as a value.** The way back from a
 setting that was previously unset is `defaults delete`, not "write a 0". A
 written `false` is not the same as "not set": Apple can change the default in
 the next release, and then the written value silently freezes a state nobody
@@ -105,4 +107,4 @@ notice.
 
 ## Links
 
-[[admin-rights]] · [[window-manager]] · [[bsd-gotchas]] · [[chezmoi]]
+[[admin-rights]] · [[rectangle]] · [[bsd-gotchas]] · [[chezmoi]]

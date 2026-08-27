@@ -10,7 +10,7 @@ install: manual
 package: Brewfile
 requires: [homebrew, chezmoi]
 machines: [mac]
-checked_on: 2026-04-11
+checked_on: 2026-08-25
 checked_by: machine
 ---
 
@@ -51,13 +51,13 @@ brew leaves | wc -l                   # count of top-level formulae
 
 ## Decisions
 
-**2026-03-20 — rejected entries stay in the file, commented out.** A tool that
+**2026-08-22 — rejected entries stay in the file, commented out.** A tool that
 was deliberately removed would otherwise be reinstalled by the next person
 reading a "missing" tool as a gap. The comment names the date and the reason
 and points at the note. So far one entry has needed it:
 
 ```ruby
-# cask "screen-recorder"  # removed 2026-04-03, discontinued — see apps/screen-recorder.md
+# cask "kap"  # removed 2026-08-22, discontinued — see apps/kap.md
 ```
 
 That is a small thing that pays every single rebuild.
@@ -77,4 +77,4 @@ skill treats the Brewfile edit as a separate step and not as cleanup.
 
 ## Links
 
-[[homebrew]] · [[chezmoi]] · [[screen-recorder]] · [[search-tools]]
+[[homebrew]] · [[chezmoi]] · [[kap]] · [[search-tools]]

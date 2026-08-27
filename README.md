@@ -1,9 +1,15 @@
 # setup-wiki
 
-**A demonstration.** This is a fictional machine-setup wiki: one Markdown note
-per decision, in folders by topic, with an index on top and a schema that a
-language model can act on. The machine, the company and the incidents in it are
-invented. The *shape* is the point.
+**A demonstration, not a fabrication.** This is an extract from the setup wiki
+of a real MacBook Pro: one Markdown note per decision, in folders by topic,
+with an index on top and a schema a language model can act on. The tools, the
+decisions and the incidents are real and happened on a machine that is run this
+way.
+
+What has been taken out is anything that identifies the employer. The company
+is not named, and internal hostnames, paths, ticket numbers and credentials
+never enter this repository at all. Some notes are shortened. Nothing in them
+is invented.
 
 **Start at [INDEX.md](INDEX.md). The rules are in [CONVENTIONS.md](CONVENTIONS.md).**
 
@@ -29,8 +35,8 @@ So each note carries a `commitment` field:
 | `medium` | Replaceable, but configuration or muscle memory hangs off it |
 | `fixed` | Hardware, company policy, or half a dozen other notes. Do not research, only check the version |
 
-In this demo, `apps/screen-recorder.md` is what that produced: a tool that
-looked fine and had been dead for three and a half years.
+In this demo, `apps/kap.md` is what that produced: a tool that
+looked fine and whose last release was almost four years old.
 
 ## Related: Karpathy's LLM Wiki
 

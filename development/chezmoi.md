@@ -8,9 +8,9 @@ commitment: fixed
 commitment_reason: All three machines pull from it; a move would mean re-establishing every config file by hand
 install: brew
 package: chezmoi
-requires: [homebrew, password-store]
+requires: [homebrew, gopass]
 machines: [mac, linux-laptop, homeserver]
-checked_on: 2026-04-11
+checked_on: 2026-08-25
 checked_by: machine
 ---
 
@@ -57,7 +57,7 @@ chezmoi source-path ~/.gitconfig   # resolves to the source file
 
 ## Decisions
 
-**2026-03-14 — no credentials in the source tree, and this is enforced, not
+**2026-08-15 — no credentials in the source tree, and this is enforced, not
 advised.** Neither the source tree nor any file chezmoi renders may hold a
 secret. That specifically rules out template calls that pull a secret from the
 password store: the rendered target file then holds the plaintext, which is the
@@ -68,7 +68,7 @@ script degrades gracefully when the agent cache is cold — log the reason and
 skip, do not fail the run. A scheduled job greps both repositories for private
 key markers.
 
-**2026-03-14 — the justfile is a template with swapped delimiters.** just uses
+**2026-08-15 — the justfile is a template with swapped delimiters.** just uses
 `{{ }}` itself, so the template is configured for `[[ ]]`. Without that, every
 just variable is eaten by the renderer, and the failure is silent.
 
@@ -90,4 +90,4 @@ mounted somewhere, write via a temp file and `cat > target` to keep the inode.
 
 ## Links
 
-[[fish]] · [[brewfile]] · [[password-store]] · [[corporate-tls]] · [[macos-defaults]]
+[[fish]] · [[brewfile]] · [[gopass]] · [[corporate-tls]] · [[macos-defaults]]

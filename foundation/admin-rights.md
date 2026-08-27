@@ -7,7 +7,7 @@ status: active
 commitment: fixed
 commitment_reason: Company policy, not a preference
 machines: [mac]
-checked_on: 2026-04-11
+checked_on: 2026-08-25
 checked_by: human
 ---
 

@@ -10,9 +10,9 @@ install: brew
 package: neovim
 requires: [homebrew, search-tools]
 machines: [mac, linux-laptop, homeserver]
-researched_on: 2026-04-03
+researched_on: 2026-08-22
 research_finding: none
-checked_on: 2026-04-12
+checked_on: 2026-08-26
 checked_by: machine
 ---
 
@@ -62,14 +62,14 @@ not a check — see Pitfalls.
 
 ## Decisions
 
-**2026-04-12 — the server list is derived from `PATH`, not hardcoded.** The
+**2026-08-26 — the server list is derived from `PATH`, not hardcoded.** The
 first version listed servers explicitly and was correct on this Mac only. On
 the two Linux machines it silently stopped installing two of them, because the
 same config file is shared and the reason for the Mac-specific choice did not
 apply there. A list that describes intent (`these four servers`) plus a
 `PATH` probe is machine-independent; a list that describes a machine is not.
 
-**2026-04-12 — a fork over the original, because of the distribution channel.**
+**2026-08-26 — a fork over the original, because of the distribution channel.**
 One Python server is blocked by the company's package scanner on the npm route.
 The maintained fork ships from the Python index instead, which the scanner does
 not sit in front of. That is a different channel, not a bypass of a scan — worth

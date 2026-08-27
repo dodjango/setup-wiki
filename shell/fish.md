@@ -10,9 +10,9 @@ install: brew
 package: fish
 requires: [homebrew]
 machines: [mac, linux-laptop, homeserver]
-researched_on: 2026-04-03
+researched_on: 2026-08-22
 research_finding: soft
-checked_on: 2026-04-11
+checked_on: 2026-08-25
 checked_by: inherited
 ---
 
@@ -47,20 +47,20 @@ fish -c 'type -q z; and echo zoxide ok'
 
 ## Decisions
 
-**2026-03-10 — scripts stay bash, always.** Every script in
+**2026-08-11 — scripts stay bash, always.** Every script in
 `~/.config/scripts/` starts with `#!/usr/bin/env bash`, and nothing in this
 setup is written in fish script. The reason is portability across the three
 machines, but also that a shell you use interactively and a shell you write
 programs in do not have to be the same shell, and pretending otherwise is how
 people end up with unportable automation.
 
-**2026-03-10 — no plugin manager.** Fisher, oh-my-fish and the rest were
+**2026-08-11 — no plugin manager.** Fisher, oh-my-fish and the rest were
 skipped. Everything wanted from them here is either built in or twenty lines in
 `conf.d/`.
 
 ## Alternatives
 
-**2026-04-03 — zsh with zsh-autosuggestions, soft finding.** zsh plus two
+**2026-08-22 — zsh with zsh-autosuggestions, soft finding.** zsh plus two
 plugins reaches functional parity and is POSIX, which would remove the two-shell
 split entirely. Not compelling enough to rewrite 400 lines of `conf.d/` and a
 dozen functions for; noted so the next research run does not rediscover it as

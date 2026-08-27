@@ -9,9 +9,9 @@ install: brew-cask
 package: shottr keka marta espanso
 requires: [homebrew]
 machines: [mac]
-researched_on: 2026-04-03
+researched_on: 2026-08-22
 research_finding: none
-checked_on: 2026-04-10
+checked_on: 2026-08-25
 checked_by: inherited
 ---
 
@@ -40,6 +40,17 @@ notes are where wikis go to rot.
 brew install --cask shottr keka marta espanso
 ```
 
+**Marta:** configuration in `~/.config/marta/conf.marco`. `Ctrl+Shift+C` copies
+the path (the equivalent of `cm_CopyFullNamesToClip` from `WINCMD.INI`),
+`Ctrl+D` opens the favourites. Terminal and editor are set to the ones from
+[[fish]] and not to Terminal.app and TextEdit. The F-keys already matched — F5
+copy, F6 move, F7 new folder, F8 delete; both tools stand in the Norton
+tradition.
+
+**Shottr:** target folder set via `defaultFolder`, `afterGrabSave` on. Video is
+covered by `Cmd-Shift-5` — Kap was installed for it once and removed again, see
+[[kap]].
+
 ## Verify
 
 ```bash
@@ -55,10 +66,10 @@ done
 
 ## Decisions
 
-**2026-03-18 — Espanso's config is not at its default path.** It is symlinked
+**2026-08-19 — Espanso's config is not at its default path.** It is symlinked
 into the shared dotfiles directory so the same expansions work on the Linux
 machines. The default location holds only the link.
 
 ## Links
 
-[[homebrew]] · [[screen-recorder]] · [[window-manager]] · [[chezmoi]]
+[[homebrew]] · [[kap]] · [[rectangle]] · [[chezmoi]]

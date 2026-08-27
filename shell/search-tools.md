@@ -9,9 +9,9 @@ install: brew
 package: fzf zoxide eza bat fd ripgrep sd
 requires: [fish]
 machines: [mac, linux-laptop, homeserver]
-researched_on: 2026-04-03
+researched_on: 2026-08-22
 research_finding: none
-checked_on: 2026-04-11
+checked_on: 2026-08-25
 checked_by: machine
 ---
 
