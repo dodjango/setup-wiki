@@ -30,7 +30,7 @@ So each note carries a `commitment` field:
 | `fixed` | Hardware, company policy, or half a dozen other notes. Do not research, only check the version |
 
 In this demo, `apps/screen-recorder.md` is what that produced: a tool that
-looked fine and had been dead for three years.
+looked fine and had been dead for three and a half years.
 
 ## Related: Karpathy's LLM Wiki
 
@@ -117,8 +117,8 @@ part:
 | `soft` | append to `## Alternatives`. Still silent |
 | `hard` | append **and** send one message |
 
-With two dozen loosely committed tools there is *always* something newer
-somewhere. A run that notified on every soft finding would burn the channel
+Across the loosely committed notes there is *always* something newer
+somewhere — each of them covers several tools. A run that notified on every soft finding would burn the channel
 within two weeks, and the one hard finding a year — the discontinued tool with
 the end-of-life runtime — would arrive in a stream nobody reads any more. The
 silence is the feature.
@@ -152,12 +152,11 @@ where the one-line command goes quietly wrong.
   recorded.
 - **`mac-update`** — Updates one tool or everything stale, note-guided, running
   each note's `## Verify` afterwards and writing back what changed.
-- **`mac-research`** — Looks for alternatives to the five least recently checked
-  tools, and decides whether a finding is worth interrupting anyone for.
+- **`mac-research`** — Looks for alternatives in the five notes with the oldest
+  `researched_on`, and decides whether a finding is worth interrupting anyone
+  for.
 - **`mac-write-note`** — Writes or updates the note after a change, without
   asking whether the change is worth recording.
-- **`read-aloud`** — Reads a text out loud, rewritten for listening rather than
-  spoken off the screen; the one skill here with nothing to do with the wiki.
 
 ## What makes it work for a language model
 

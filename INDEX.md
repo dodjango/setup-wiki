@@ -38,11 +38,6 @@ All of them live **here in the repository**, under `.claude/skills/`:
 | `mac-update` | operating | Update one tool or everything stale, note by note |
 | `mac-research` | judging | Look for alternatives — weekly, five notes per run |
 | `mac-write-note` | recording | Write or update a note after something changed |
-| `read-aloud` | sideways | Read a text out loud when reading is hard |
-
-`read-aloud` is the only one with nothing to do with the wiki. It lives here
-anyway, because it is bound to the same machine as everything else: the speech
-command only exists on macOS.
 
 ## Before a rebuild
 

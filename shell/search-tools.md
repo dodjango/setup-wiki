@@ -9,7 +9,7 @@ install: brew
 package: fzf zoxide eza bat fd ripgrep sd
 requires: [fish]
 machines: [mac, linux-laptop, homeserver]
-researched_on: 2026-04-10
+researched_on: 2026-04-03
 research_finding: none
 checked_on: 2026-04-11
 checked_by: machine
@@ -59,12 +59,6 @@ older machine still had `exa` installed and was migrated during a sync.
 next rebuild, please check whether any of these seven has gone quiet or been
 overtaken. Nothing depends on them, so the check is cheap and the swap is
 cheap.
-
-## Alternatives
-
-**2026-04-10 — nothing new, finding `none`.** All seven have had a release in
-the last six months. `sd` is the slowest-moving of them and stays on the watch
-list.
 
 ## Links
 

@@ -44,11 +44,6 @@ enough:
 - **Never used.** The output directory was empty after three weeks. The single
   attempt to use it produced an unusable file.
 
-The alternatives research found this, on its first run. That is precisely what
-`commitment: loose` is for: without the run, this tool would have been carried
-into the next machine along with its dead runtime, because nothing about it
-looked broken.
-
 **No replacement purchased.** A commercial tool could cover both this and the
 screenshot tool. For something that produced no usable output at all, spending
 money is the wrong direction. Instead:
@@ -61,6 +56,19 @@ money is the wrong direction. Instead:
 
 **If the need comes back**, the question is asked again — with a maintained
 candidate, not with this one.
+
+## Alternatives
+
+**2026-04-03 — hard finding, on the first run of the alternatives research.**
+Checked the release history, the commit log and the advisories against the
+bundled runtime; the three results are under `## Decisions` above, because they
+became the reason for removal rather than staying a research note. No
+maintained candidate was adopted in its place.
+
+This is precisely what `commitment: loose` is for. Nothing about the tool
+looked broken from the outside — it launched, it had a menu bar icon, it was in
+the Brewfile. Without a run that asks the question on a schedule, it would have
+been carried into the next machine along with its dead runtime.
 
 ## Pitfalls
 

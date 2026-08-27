@@ -51,10 +51,10 @@ brew leaves | wc -l                   # count of top-level formulae
 
 ## Decisions
 
-**2026-03-20 — rejected entries stay in the file, commented out.** Three tools
-were deliberately removed and would otherwise be reinstalled by the next person
+**2026-03-20 — rejected entries stay in the file, commented out.** A tool that
+was deliberately removed would otherwise be reinstalled by the next person
 reading a "missing" tool as a gap. The comment names the date and the reason
-and points at the note:
+and points at the note. So far one entry has needed it:
 
 ```ruby
 # cask "screen-recorder"  # removed 2026-04-03, discontinued — see apps/screen-recorder.md

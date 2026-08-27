@@ -9,7 +9,7 @@ install: brew-cask
 package: shottr keka marta espanso
 requires: [homebrew]
 machines: [mac]
-researched_on: 2026-04-10
+researched_on: 2026-04-03
 research_finding: none
 checked_on: 2026-04-10
 checked_by: inherited
