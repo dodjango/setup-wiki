@@ -8,14 +8,19 @@ reports two kinds of finding:
   ERROR   the wiki is broken and something downstream will act on bad data:
           missing front matter or required fields, a duplicate id, a filename
           that disagrees with its id, a folder that disagrees with `section`,
-          an unknown value in `commitment`, `checked_by` or `research_finding`,
-          or body sections out of the prescribed order.
+          an unknown value in `status`, `commitment`, `install`, `machines`,
+          `checked_by` or `research_finding`, a date that is not YYYY-MM-DD,
+          a `requires` or `replaces` naming a note that does not exist, or
+          body sections out of the prescribed order.
 
   notice  the wiki is usable but something is unfinished or claims too much:
-          `commitment_reason` or `researched_on` missing where the schema asks
-          for them, an active note without `## Verify`, a `[[link]]` to a note
-          that does not exist yet, a note nothing links to, or `checked_by:
-          machine` next to a check that says `# by hand:`.
+          `commitment_reason`, `researched_on` or `research_finding` missing
+          where the schema asks for them, `install` without `package` or the
+          other way round, a `research_finding` that disagrees with whether
+          `## Alternatives` is present, an active note without `## Verify`, a
+          date in the future, a `[[link]]` to a note that does not exist yet, a
+          note nothing links to, a `replaces` target not marked superseded, or
+          `checked_by: machine` next to a check that says `# by hand:`.
 
 Errors exit non-zero, notices do not. The last two lines are the tally and the
 verification standing — how much of the wiki has actually been checked against
@@ -27,15 +32,22 @@ Run it with ./check.py — no arguments, no dependencies.
 import re
 import sys
 import pathlib
+import datetime
 import collections
 
 REQUIRED = {"id", "title", "section", "purpose", "status", "machines",
             "checked_on", "checked_by"}
+STATUSES = {"active", "planned", "rejected", "superseded"}
 COMMITMENTS = {"loose", "medium", "fixed"}
+INSTALLS = {"brew", "brew-cask", "npm", "manual", "system-setting", "homegrown"}
+MACHINES = {"mac", "linux-laptop", "homeserver"}
+DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 FINDINGS = {"none", "soft", "hard"}
 CHECKERS = {"machine", "human", "inherited"}
 SECTIONS = ["Why", "Setup", "Verify", "Decisions",
             "Alternatives", "Pitfalls", "Links"]
+
+TODAY = datetime.date.today().isoformat()
 
 root = pathlib.Path(__file__).parent
 # README carries no front matter and is not a note. The skills under .claude/
@@ -69,6 +81,11 @@ def headings(text):
     """
     body = re.sub(r"```.*?```", "", text, flags=re.S)
     return [m.group(1) for m in re.finditer(r"^## (\S+)", body, re.M)]
+
+
+def id_list(value):
+    """Parse a `[a, b]` front-matter list into ids. Tolerates a bare value."""
+    return [v.strip() for v in value.strip("[]").split(",") if v.strip()]
 
 
 def front_matter(text):
@@ -112,17 +129,48 @@ for path, rel in wiki_files():
     if fm.get("section") not in ("meta", None) and rel.parent.name != fm.get("section"):
         errors.append(f"{rel}: section '{fm.get('section')}' does not match the folder")
 
+    for field in ("checked_on", "researched_on"):
+        value = fm.get(field)
+        if value and not DATE.match(value):
+            errors.append(f"{rel}: {field} '{value}' is not YYYY-MM-DD")
+        elif value and value > TODAY:
+            notices.append(f"{rel}: {field} '{value}' is in the future")
+
     present = headings(text)
     commitment = fm.get("commitment")
     if fm.get("section") != "meta":
+        if fm.get("status") not in STATUSES:
+            errors.append(f"{rel}: status '{fm.get('status')}' unknown")
+        for machine in id_list(fm.get("machines", "")):
+            if machine not in MACHINES:
+                errors.append(f"{rel}: machines lists '{machine}', unknown")
+        # install and package describe one thing between them; one without the
+        # other leaves the update skill with nothing to act on.
+        if fm.get("install") and fm["install"] not in INSTALLS:
+            errors.append(f"{rel}: install '{fm['install']}' unknown")
+        if bool(fm.get("install")) != bool(fm.get("package")):
+            notices.append(f"{rel}: install and package must come as a pair")
         if commitment not in COMMITMENTS:
             errors.append(f"{rel}: commitment missing or invalid")
         if commitment in ("medium", "fixed") and not fm.get("commitment_reason"):
             notices.append(f"{rel}: commitment '{commitment}' without commitment_reason")
-        if commitment in ("loose", "medium") and not fm.get("researched_on"):
-            notices.append(f"{rel}: commitment '{commitment}' without researched_on")
-        if fm.get("research_finding") and fm["research_finding"] not in FINDINGS:
-            errors.append(f"{rel}: research_finding '{fm['research_finding']}' unknown")
+        if commitment in ("loose", "medium"):
+            for field in ("researched_on", "research_finding"):
+                if not fm.get(field):
+                    notices.append(f"{rel}: commitment '{commitment}' without {field}")
+        finding = fm.get("research_finding")
+        if finding and finding not in FINDINGS:
+            errors.append(f"{rel}: research_finding '{finding}' unknown")
+        # The finding lives in two places and the two must agree: `none` writes
+        # no section, or the file fills up with "nothing new" lines; `soft` and
+        # `hard` must write one, or the finding is lost the moment the date is
+        # bumped. Both directions were violated here before this check existed.
+        if finding == "none" and "Alternatives" in present:
+            notices.append(f"{rel}: research_finding 'none' but an "
+                           "'## Alternatives' section is present")
+        if finding in ("soft", "hard") and "Alternatives" not in present:
+            notices.append(f"{rel}: research_finding '{finding}' but no "
+                           "'## Alternatives' section")
         if "Verify" not in present and fm.get("status") == "active":
             notices.append(f"{rel}: no '## Verify' section")
         if fm.get("checked_by") not in CHECKERS:
@@ -136,6 +184,22 @@ for path, rel in wiki_files():
     if order != sorted(order, key=SECTIONS.index):
         errors.append(f"{rel}: sections are not in the prescribed order: "
                       + " -> ".join(order))
+
+# requires and replaces are resolved against the note index, unlike a
+# `[[link]]`: a link into the void is allowed and marks a gap to be written,
+# but an unresolvable requires leaves the bootstrap skill unable to order the
+# install, and an unresolvable replaces claims a supersession that never
+# happened.
+for rel, fm in front.items():
+    for target in id_list(fm.get("requires", "")):
+        if target not in notes:
+            errors.append(f"{rel}: requires '{target}', which is not a note")
+    for target in id_list(fm.get("replaces", "")):
+        if target not in notes:
+            errors.append(f"{rel}: replaces '{target}', which is not a note")
+        elif front.get(notes[target], {}).get("status") != "superseded":
+            notices.append(f"{rel}: replaces '{target}', but that note is not "
+                           "marked 'status: superseded'")
 
 links = collections.Counter()
 for rel, text in texts.items():
