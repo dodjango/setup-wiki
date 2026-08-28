@@ -10,8 +10,8 @@ reports two kinds of finding:
           that disagrees with its id, a folder that disagrees with `section`,
           an unknown value in `status`, `commitment`, `install`, `machines`,
           `checked_by` or `research_finding`, a date that is not YYYY-MM-DD,
-          a `requires` or `replaces` naming a note that does not exist, or
-          body sections out of the prescribed order.
+          a `requires` naming a note that does not exist, or body sections out
+          of the prescribed order.
 
   notice  the wiki is usable but something is unfinished or claims too much:
           `commitment_reason`, `researched_on` or `research_finding` missing
@@ -195,9 +195,10 @@ for rel, fm in front.items():
         if target not in notes:
             errors.append(f"{rel}: requires '{target}', which is not a note")
     for target in id_list(fm.get("replaces", "")):
-        if target not in notes:
-            errors.append(f"{rel}: replaces '{target}', which is not a note")
-        elif front.get(notes[target], {}).get("status") != "superseded":
+        # Not an error when no note exists: `replaces` names what became
+        # obsolete, and much of that was never installed here in the first
+        # place. Only a target that *is* a note has to say so.
+        if target in notes and front.get(notes[target], {}).get("status") != "superseded":
             notices.append(f"{rel}: replaces '{target}', but that note is not "
                            "marked 'status: superseded'")
 
